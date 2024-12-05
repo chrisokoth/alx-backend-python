@@ -1,11 +1,12 @@
 import mysql.connector
+from decouple import config
 
 def connect_to_prodev():
     """Connect to the MySQL database."""
     return mysql.connector.connect(
         host="localhost",  
-        user="root",       
-        password="okothee07",  
+        user=config("DB_USER"),
+        password=config("DB_PASSWORD"),  
         database="ALX_prodev"
     )
 

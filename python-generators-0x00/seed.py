@@ -1,4 +1,4 @@
-
+from decouple import config
 from configparser import Error
 import mysql.connector
 import csv
@@ -11,8 +11,8 @@ def connect_db():
         # Attempting to connect to MySQL server
         connection = mysql.connector.connect(
             host="localhost",  
-            user="root",  
-            password="okothe07"  
+            user=config("DB_USER"),
+            password=config("DB_PASSWORD")"  
         )
         if connection.is_connected():  # Check if connection is successful
             print("Database connected successfully")
