@@ -1,21 +1,20 @@
+from datetime import datetime
 import sqlite3
-import functools
 import logging
+import functools
 
-# Set up logging configuration
+# Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
 def log_queries(func):
-    """
-    Decorator to log SQL queries executed by the decorated function.
-    """
+    """Decorator to log SQL queries before execution."""
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        query = kwargs.get('query') or (args[0] if args else None)
+        query = kwargs.get('query') if 'query' in kwargs else args[0] if args else None
         if query:
             logging.info(f"Executing query: {query}")
         else:
-            logging.warning("No SQL query found in arguments.")
+            logging.warning("No SQL query provided to log.")
         return func(*args, **kwargs)
     return wrapper
 
@@ -27,7 +26,3 @@ def fetch_all_users(query):
     results = cursor.fetchall()
     conn.close()
     return results
-
-# Fetch users while logging the query
-users = fetch_all_users(query="SELECT * FROM users")
-print(users)
