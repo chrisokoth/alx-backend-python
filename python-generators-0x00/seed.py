@@ -3,6 +3,7 @@ from configparser import Error
 import mysql.connector
 import csv
 import uuid
+import os
 
 # Database connection function
 def connect_db():
@@ -12,7 +13,7 @@ def connect_db():
         connection = mysql.connector.connect(
             host="localhost",  
             user=config("DB_USER"),
-            password=config("DB_PASSWORD")"  
+            password=config("DB_PASSWORD")
         )
         if connection.is_connected():  # Check if connection is successful
             print("Database connected successfully")
@@ -44,7 +45,7 @@ def create_table(connection):
     cursor = connection.cursor()
     create_table_query = """
     CREATE TABLE IF NOT EXISTS user_data (
-        user_id UUID PRIMARY KEY,
+        user_id CHAR(36) PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL,
         age DECIMAL(10, 2) NOT NULL
@@ -69,6 +70,10 @@ def insert_data(connection, data):
     cursor.close()
 
 # Load data from the CSV file and prepare it for insertion
+import csv
+import uuid
+import os
+
 def load_data_from_csv(file_name="user_data.csv"):
     """Load data from the CSV file."""
     data = []
@@ -76,20 +81,45 @@ def load_data_from_csv(file_name="user_data.csv"):
     file_path = os.path.join(os.getcwd(), file_name)
 
     try:
-        with open(file_path, newline='') as csvfile:
+        with open(file_path, newline='', encoding='utf-8') as csvfile:
             csvreader = csv.reader(csvfile)
             next(csvreader)  # Skip the header row
+            
             for row in csvreader:
+                print(f"Raw row: {row}")  # Print raw row for debugging
+
+                # Check if the row is empty or does not have enough columns
+                if not row or len(row) < 3:  
+                    print(f"Skipping empty or malformed row: {row}")
+                    continue
+                
+                # Ensure the row has 3 valid columns
+                name = row[0].strip() if len(row) > 0 else ''
+                email = row[1].strip() if len(row) > 1 else ''
+                age = row[2].strip() if len(row) > 2 else ''
+                
+                # Skip rows that have any missing or empty values
+                if not name or not email or not age:
+                    print(f"Skipping incomplete row: {row}")
+                    continue
+
+                try:
+                    age = float(age)  # Convert age to a float (may throw ValueError if not a number)
+                except ValueError:
+                    print(f"Skipping row with invalid age value: {row}")
+                    continue
+
                 user_id = str(uuid.uuid4())  # Generate unique UUID for each user
-                name = row[0]
-                email = row[1]
-                age = row[2]
                 data.append((user_id, name, email, age))
+
         print(f"Data loaded successfully from {file_path}")
     except Exception as e:
         print(f"Error loading CSV file: {e}")
     
     return data
+
+
+
 
 # Load data from the CSV file and prepare it for insertion
 def load_data_from_csv(file_name="user_data.csv"):
