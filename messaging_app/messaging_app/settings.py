@@ -29,8 +29,7 @@ SECRET_KEY = 'django-insecure-qkgbypq1@%&$5%%q0div)y!^_p-r^=r^f3jv(z&dt&h^vry#us
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -43,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'chats',
+    'drf_yasg',
 ]
 
 REST_FRAMEWORK = {

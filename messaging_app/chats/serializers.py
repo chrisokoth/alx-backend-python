@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import User, Conversation, Message
-from rest_framework.fields import CharField
-from rest_framework.exceptions import ValidationError
+# from rest_framework.fields import CharField
+# from rest_framework.exceptions import ValidationError
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
