@@ -8,7 +8,8 @@ class User(AbstractUser):
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     email = models.EmailField(unique=True)  # Ensure email is unique
     phone_number = models.CharField(max_length=15, blank=True, null=True)
-    # Use first_name and last_name from AbstractUser
+    # Explicitly define the password field (optional but may be needed for checks)
+    password = models.CharField(max_length=128)  # Default length for hashed passwords
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
