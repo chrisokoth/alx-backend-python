@@ -1,0 +1,14 @@
+asgiref==3.8.1
+Django==5.1.5
+django-filter==24.3
+djangorestframework==3.15.2
+drf-nested-routers==0.94.1
+drf-yasg==1.21.8
+inflection==0.5.1
+mysqlclient==2.2.7
+packaging==24.2
+python-decouple==3.8
+pytz==2024.2
+PyYAML==6.0.2
+sqlparse==0.5.3
+uritemplate==4.1.1
