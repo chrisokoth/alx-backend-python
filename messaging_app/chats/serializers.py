@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import User, Conversation, Message
+from rest_framework.fields import CharField
+from rest_framework.exceptions import ValidationError
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
@@ -27,3 +29,5 @@ class ConversationSerializer(serializers.ModelSerializer):
     def get_messages(self, obj):
         messages = obj.messages.all()
         return MessageSerializer(messages, many=True).data
+
+# Ensure imports of CharField and ValidationError are included
