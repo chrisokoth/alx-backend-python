@@ -1,5 +1,6 @@
 asgiref==3.8.1
 Django==5.1.5
+django-filter==24.3
 djangorestframework==3.15.2
 drf-nested-routers==0.94.1
 drf-yasg==1.21.8
