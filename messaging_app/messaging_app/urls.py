@@ -34,7 +34,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api', include('chats.urls')),
+    path('api/', include('chats.urls')),  # Include API routes with 'api' prefix
+    path('api-auth/', include('rest_framework.urls')),
     path('swagger/', csrf_exempt(schema_view.with_ui('swagger', cache_timeout=0)), name='schema-swagger-ui'),
 ]
-["api/"]
