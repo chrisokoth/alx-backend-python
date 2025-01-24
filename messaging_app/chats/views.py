@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -9,60 +11,21 @@ from .models import Conversation, Message, User
 from .serializers import ConversationSerializer, MessageSerializer, UserSerializer
 
 
-class ConversationViewSet(viewsets.ViewSet):
-    """
-    A simple ViewSet for listing and creating conversations.
-    """
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
+from rest_framework.response import Response
+from .models import Conversation, Message
+from .serializers import ConversationSerializer, MessageSerializer
 
-    @swagger_auto_schema(
-        operation_description="List all conversations",
-        responses={200: ConversationSerializer(many=True)},
-    )
-    def list(self, request):
-        queryset = Conversation.objects.all()
-        serializer = ConversationSerializer(queryset, many=True)
-        return Response(serializer.data)
+class ConversationViewSet(viewsets.ModelViewSet):
+    queryset = Conversation.objects.all()
+    serializer_class = ConversationSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ['id', 'title']  # Adjust fields as necessary
 
-    @swagger_auto_schema(
-        operation_description="Create a new conversation",
-        request_body=ConversationSerializer,
-        responses={201: ConversationSerializer, 400: "Invalid data"},
-    )
-    def create(self, request):
-        serializer = ConversationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class MessageViewSet(viewsets.ViewSet):
-    """
-    A simple ViewSet for listing and sending messages.
-    """
-
-    @swagger_auto_schema(
-        operation_description="List messages for a specific conversation",
-        responses={200: MessageSerializer(many=True)},
-        manual_parameters=[
-            openapi.Parameter('conversation_id', openapi.IN_PATH, description="ID of the conversation", type=openapi.TYPE_STRING)
-        ]
-    )
-    def list(self, request, conversation_id=None):
-        queryset = Message.objects.filter(conversation_id=conversation_id)
-        serializer = MessageSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(
-        operation_description="Send a message to a specific conversation",
-        request_body=MessageSerializer,
-        responses={201: MessageSerializer, 400: "Invalid data"},
-        manual_parameters=[
-            openapi.Parameter('conversation_id', openapi.IN_PATH, description="ID of the conversation", type=openapi.TYPE_STRING)
-        ]
-    )
-    def create(self, request, conversation_id=None):
-        serializer = MessageSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(conversation_id=conversation_id)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ['conversation_id', 'content']  # Adjust fields as necessary
