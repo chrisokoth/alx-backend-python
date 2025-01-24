@@ -5,16 +5,16 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}         # This should match MYSQL_DB
+      MYSQL_USER: ${DB_USER}             # This should match MYSQL_USER
+      MYSQL_PASSWORD: ${DB_PASSWORD}     # This should match MYSQL_PASSWORD
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}  # Optional root password
     ports:
       - "3306:3306"
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python3 manage.py runserver 0.0.0.0:8000  # Ensure the command is this
     volumes:
       - .:/app
     ports:
@@ -23,3 +23,5 @@ services:
       - db
     environment:
       - DATABASE_URL=mysql://${DB_USER}:${DB_PASSWORD}@db/${DB_NAME}
+
+  ["MYSQL_DB"]
