@@ -22,3 +22,5 @@ router.register(r'conversations/(?P<conversation_id>[^/.]+)/messages', MessageVi
 urlpatterns = [
     path('', include(router.urls)),
 ]
+
+["routers.DefaultRouter()"]
