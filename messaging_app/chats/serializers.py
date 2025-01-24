@@ -18,8 +18,12 @@ class MessageSerializer(serializers.ModelSerializer):
 # Conversation Serializer
 class ConversationSerializer(serializers.ModelSerializer):
     participants = UserSerializer(many=True, read_only=True)
-    messages = MessageSerializer(many=True, read_only=True)
+    messages = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
         fields = ['conversation_id', 'participants', 'messages', 'created_at']
+
+    def get_messages(self, obj):
+        messages = obj.messages.all()
+        return MessageSerializer(messages, many=True).data
