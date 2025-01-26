@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Apply blue deployment
+echo "Deploying the blue version..."
+kubectl apply -f messaging_app/blue_deployment.yaml
+
+# Apply green deployment
+echo "Deploying the green version..."
+kubectl apply -f messaging_app/green_deployment.yaml
+
+# Switch service to point to the green deployment
+echo "Switching service to the green version..."
+kubectl patch service django-messaging-service -p '{"spec":{"selector":{"app":"django-messaging-app-green"}}}'
+
+# Check logs for the new version
+echo "Checking logs for the green version..."
+kubectl logs -l app=django-messaging-app-green
