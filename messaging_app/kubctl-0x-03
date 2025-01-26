@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Apply the updated blue deployment
+echo "Applying the updated blue deployment..."
+kubectl apply -f messaging_app/blue_deployment.yaml
+
+# Monitor the rollout status
+echo "Monitoring the rollout status..."
+kubectl rollout status deployment/django-messaging-app-blue
+
+# Test for downtime or disruption using curl
+echo "Testing application for downtime..."
+while true; do
+    curl -s http://django-messaging-service:8000/api/  # Adjust the URL as necessary
+    sleep 1  # Delay between requests
+done
+

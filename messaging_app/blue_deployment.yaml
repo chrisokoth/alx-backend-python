@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: django-app
-        image: your_dockerhub_username/messaging_app:latest  
+        image: your_dockerhub_username/messaging_app:2.0 
         ports:
         - containerPort: 8000
         env:
