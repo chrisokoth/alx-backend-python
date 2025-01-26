@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: django-messaging-config
+data:
+  DB_NAME: "messaging_app"
+  DB_USER: "root"
+  DB_PASSWORD: "okothee07"  
